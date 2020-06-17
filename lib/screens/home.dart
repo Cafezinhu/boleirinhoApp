@@ -3,6 +3,8 @@ import 'package:BoleirinhoApp/components/cards/receita.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
 import 'package:BoleirinhoApp/models/ingrediente_na_receita.dart';
 import 'package:BoleirinhoApp/models/receita.dart';
+import 'package:BoleirinhoApp/screens/adicionar/ingrediente.dart';
+import 'package:BoleirinhoApp/screens/adicionar/receita.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget{
@@ -15,72 +17,73 @@ class Home extends StatefulWidget{
   }
 }
 
-class HomeState extends State<Home>{
-  DefaultTabController _tabController;
+class HomeState extends State<Home> with SingleTickerProviderStateMixin{
+  TabController _tabController;
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     widget._ingredientes.add(Ingrediente("Chocolate", 1.00, "g"));
     widget._ingredientesNaReceita.add(IngredienteNaReceita(widget._ingredientes[0], 500));
     widget._receitas.add(Receita("Bolo de chocolate", "bla bla bla", 15.00, widget._ingredientesNaReceita));
-    _tabController = DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Boleirinho"),
-          bottom: TabBar(
-            tabs: <Widget>[
-              Tab(
-                icon: Icon(Icons.cake),
-                text: "Receitas",
-              ),
-              Tab(
-                icon: Icon(Icons.local_cafe),
-                text: "Ingredientes",
-              )
-            ]
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Boleirinho"),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: <Widget>[
+            Tab(
+              icon: Icon(Icons.cake),
+              text: "Receitas",
             ),
-        ),
-        body: TabBarView(children: <Widget>[
-          ListView.builder(
-            itemCount: widget._receitas.length,
-            itemBuilder: (context, index){
-              return CartaoReceita(widget._receitas[index]);
-            }
+            Tab(
+              icon: Icon(Icons.local_cafe),
+              text: "Ingredientes",
+            )
+          ]
           ),
-          ListView.builder(
-            itemCount: widget._ingredientes.length,
-            itemBuilder: (context, index){
-              return CartaoIngrediente(widget._ingredientes[index]);
-            }
-          )
-        ],),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => {
-            abrirTelaComNumero()
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+        ListView.builder(
+          itemCount: widget._receitas.length,
+          itemBuilder: (context, index){
+            return CartaoReceita(widget._receitas[index]);
           }
         ),
-      )
+        ListView.builder(
+          itemCount: widget._ingredientes.length,
+          itemBuilder: (context, index){
+            return CartaoIngrediente(widget._ingredientes[index]);
+          }
+        )
+      ],),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => {
+          abrirTelaDeAdicao()
+        }
+      ),
     );
-    return _tabController;
   }
 
-  void abrirTelaComNumero(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Teste(_tabController.initialIndex)));
-  }
-}
-class Teste extends StatefulWidget {
-  final int _numero;
-  Teste(this._numero);
-  @override
-  _TesteState createState() => _TesteState();
-}
-
-class _TesteState extends State<Teste> {
-  
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text(widget._numero.toString()),
-    );
+  void abrirTelaDeAdicao(){
+    var _tela;
+    if(_tabController.index == 0){
+      _tela = AdicionarReceita();
+    }else{
+      _tela = AdicionarIngrediente();
+    }
+    Navigator.push(context, MaterialPageRoute(builder: (context) => _tela));
   }
 }

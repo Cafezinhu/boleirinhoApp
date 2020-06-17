@@ -1,4 +1,5 @@
 import 'package:BoleirinhoApp/models/ingrediente.dart';
+import 'package:BoleirinhoApp/screens/mostrar/ingrediente.dart';
 import 'package:flutter/material.dart';
 
 class CartaoIngrediente extends StatelessWidget {
@@ -12,7 +13,9 @@ class CartaoIngrediente extends StatelessWidget {
         subtitle: Text("R\$" + _ingrediente.precoPorUnidade.toString() + " por " + _ingrediente.unidade),
         leading: Icon(Icons.local_cafe),
         onTap: () => {
-          //chama a tela de ingrediente
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>
+            MostrarIngrediente(_ingrediente)
+          ))
         },
       ),
     );

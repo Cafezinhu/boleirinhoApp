@@ -1,5 +1,5 @@
 import 'package:BoleirinhoApp/models/receita.dart';
-import 'package:BoleirinhoApp/screens/mostrar_receita.dart';
+import 'package:BoleirinhoApp/screens/mostrar/receita.dart';
 import 'package:flutter/material.dart';
 
 class CartaoReceita extends StatelessWidget {
