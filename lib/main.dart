@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'screens/home.dart';
+
 void main() {
   runApp(Boleirinho());
 }
@@ -14,30 +16,7 @@ class Boleirinho extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Home(),
-    );
-  }
-}
-
-class Home extends StatefulWidget{
-  @override
-  State<StatefulWidget> createState() {
-    return HomeState();
-  }
-}
-
-class HomeState extends State<Home>{
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView.builder(
-        itemCount: 1,
-        itemBuilder: (context, index){
-          return Text("oieee");
-        }
-      ),
-      appBar: AppBar(
-        title: Text("Boleirinho")
-      ),
+      title: "Boleirinho"
     );
   }
 }
