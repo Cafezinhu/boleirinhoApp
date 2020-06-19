@@ -20,33 +20,36 @@ class _MostrarReceitaState extends State<MostrarReceita> {
         onPressed: null,
         child: Icon(Icons.edit)
       ),
-      body: ListView(
-        children: <Widget>[
-          Card(
-            child: ListTile(
-              title: Text("Preço total: R\$" + widget._receita.preco.toString()),
-              leading: Icon(Icons.monetization_on),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text("Instruções:"),
-              subtitle: Text(widget._receita.instrucoes),
-              leading: Icon(Icons.cake),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text("Ingredientes: "),
-            ),
-          ),
-          ListView.builder(
-            itemCount: widget._receita.ingredientes.length,
-            itemBuilder: (context, index){
-              return CartaoIngredienteNaReceita(widget._receita.ingredientes[index]);
-            }
-          )
-        ]
+      body: ListView.builder(
+        itemCount: widget._receita.ingredientes.length + 1,
+        itemBuilder: (context, index){
+          if(index == 0){
+            return Column(
+              children: <Widget>[
+                Card(
+                  child: ListTile(
+                    title: Text("Preço total: R\$" + widget._receita.preco.toString()),
+                    leading: Icon(Icons.monetization_on),
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    title: Text("Instruções:"),
+                    subtitle: Text(widget._receita.instrucoes),
+                    leading: Icon(Icons.cake),
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    title: Text("Ingredientes: "),
+                  ),
+                ),
+              ]
+            );
+          }
+
+          return CartaoIngredienteNaReceita(widget._receita.ingredientes[index - 1]);
+        }
       )
     );
   }
