@@ -10,7 +10,7 @@ class CartaoIngrediente extends StatelessWidget {
     return Card(
       child: ListTile(
         title: Text(_ingrediente.nome),
-        subtitle: Text("R\$" + _ingrediente.precoPorUnidade.toString() + " por " + _ingrediente.unidade),
+        subtitle: Text("R\$" + _ingrediente.precoPorUnidade.toString() + " por " + _ingrediente.unidade.toString()),
         leading: Icon(Icons.local_cafe),
         onTap: () => {
           Navigator.push(context, MaterialPageRoute(builder: (context)=>

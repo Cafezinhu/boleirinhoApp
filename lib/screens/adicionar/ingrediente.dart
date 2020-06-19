@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 
 class AdicionarIngrediente extends StatefulWidget {
   final TextEditingController _nomeController = TextEditingController();
-  final TextEditingController _unidadeController = TextEditingController();
   final TextEditingController _precoController = TextEditingController();
   @override
   _AdicionarIngredienteState createState() => _AdicionarIngredienteState();
 }
 
+enum Unidade {unidade, g, mL, litro}
+
 class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
+  Unidade _unidade = Unidade.unidade;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,16 +21,78 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
         title: Text("Adicionar Ingrediente")
       ),
       body: ListView(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         children: <Widget>[
           Editor(
             label: "Nome",
             controller: widget._nomeController
           ),
-          Editor(
-            label: "Unidade",
-            hint: "g, mL, etc.",
-            controller: widget._unidadeController,
+          Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text.rich(
+                    TextSpan(
+                      text: "Unidade:",
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        
+                      )
+                    )
+                  ),
+                ),
+              ),
+              ListTile(
+                title: Text("unidade"),
+                leading: Radio(
+                  value: Unidade.unidade, 
+                  groupValue: _unidade, 
+                  onChanged: (Unidade value){
+                    setState(() {
+                      _unidade = value;
+                    });
+                  }
+                ),
+              ),
+              ListTile(
+                title: Text("g"),
+                leading: Radio(
+                  value: Unidade.g, 
+                  groupValue: _unidade, 
+                  onChanged: (Unidade value){
+                    setState(() {
+                      _unidade = value;
+                    });
+                  }
+                ),
+              ),
+              ListTile(
+                title: Text("mL"),
+                leading: Radio(
+                  value: Unidade.mL, 
+                  groupValue: _unidade, 
+                  onChanged: (Unidade value){
+                    setState(() {
+                      _unidade = value;
+                    });
+                  }
+                ),
+              ),
+              ListTile(
+                title: Text("L"),
+                leading: Radio(
+                  value: Unidade.litro, 
+                  groupValue: _unidade, 
+                  onChanged: (Unidade value){
+                    setState(() {
+                      _unidade = value;
+                    });
+                  }
+                ),
+              ),
+            ]
           ),
           Editor(
             label: "Preço por unidade",
@@ -53,7 +118,7 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
   void _retornarDados(BuildContext context){
     final String nome = widget._nomeController.text;
     final double preco = double.tryParse(widget._precoController.text);
-    final String unidade = widget._unidadeController.text;
+    final String unidade = _unidade.toString().split(".")[1];
     if(nome != null && preco != null && unidade != null){
       Navigator.pop(context, Ingrediente(nome, preco, unidade));
     }
