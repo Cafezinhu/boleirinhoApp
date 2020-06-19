@@ -24,7 +24,7 @@ class _MostrarIngredienteState extends State<MostrarIngrediente> {
           Card(
             child: ListTile(
               title: Text("Unidade:"),
-              subtitle: Text(widget._ingrediente.unidade.toString().split(".")[1]),
+              subtitle: Text(widget._ingrediente.unidade),
               leading: Icon(Icons.local_cafe)
             ),
           ),
