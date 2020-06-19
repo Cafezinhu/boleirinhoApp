@@ -13,6 +13,10 @@ class Boleirinho extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        buttonTheme: ButtonThemeData(
+          buttonColor: Colors.blue,
+          textTheme: ButtonTextTheme.primary
+        ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Home(),

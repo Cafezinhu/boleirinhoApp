@@ -11,6 +11,7 @@ class Home extends StatefulWidget{
   final List<Receita> _receitas = List();
   final List<Ingrediente> _ingredientes = List();
   final List<IngredienteNaReceita> _ingredientesNaReceita = List();
+
   @override
   State<StatefulWidget> createState() {
     return HomeState();
@@ -19,10 +20,15 @@ class Home extends StatefulWidget{
 
 class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   TabController _tabController;
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    //TODO: remover estar 3 linhas
+    widget._ingredientes.add(Ingrediente("Chocolate", 1.00, "g"));
+    widget._ingredientesNaReceita.add(IngredienteNaReceita(widget._ingredientes[0], 500));
+    widget._receitas.add(Receita("Bolo de chocolate", "bla bla bla", 15.00, widget._ingredientesNaReceita));
   }
 
   @override
@@ -30,11 +36,9 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
     _tabController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    widget._ingredientes.add(Ingrediente("Chocolate", 1.00, "g"));
-    widget._ingredientesNaReceita.add(IngredienteNaReceita(widget._ingredientes[0], 500));
-    widget._receitas.add(Receita("Bolo de chocolate", "bla bla bla", 15.00, widget._ingredientesNaReceita));
     return Scaffold(
       appBar: AppBar(
         title: Text("Boleirinho"),
@@ -55,18 +59,18 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-        ListView.builder(
-          itemCount: widget._receitas.length,
-          itemBuilder: (context, index){
-            return CartaoReceita(widget._receitas[index]);
-          }
-        ),
-        ListView.builder(
-          itemCount: widget._ingredientes.length,
-          itemBuilder: (context, index){
-            return CartaoIngrediente(widget._ingredientes[index]);
-          }
-        )
+          ListView.builder(
+            itemCount: widget._receitas.length,
+            itemBuilder: (context, index){
+              return CartaoReceita(widget._receitas[index]);
+            }
+          ),
+          ListView.builder(
+            itemCount: widget._ingredientes.length,
+            itemBuilder: (context, index){
+              return CartaoIngrediente(widget._ingredientes[index]);
+            }
+          )
       ],),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -78,12 +82,19 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   }
 
   void abrirTelaDeAdicao(){
-    var _tela;
     if(_tabController.index == 0){
-      _tela = AdicionarReceita();
-    }else{
-      _tela = AdicionarIngrediente();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarReceita()))
+        .then((value) => {
+          null
+      });
+      return;
     }
-    Navigator.push(context, MaterialPageRoute(builder: (context) => _tela));
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarIngrediente()))
+      .then((ingrediente) => {
+        if(ingrediente != null){
+          setState((){widget._ingredientes.add(ingrediente);})
+        }
+    });
   }
 }

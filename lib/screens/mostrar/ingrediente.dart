@@ -19,26 +19,24 @@ class _MostrarIngredienteState extends State<MostrarIngrediente> {
         onPressed: null,
         child: Icon(Icons.edit)
       ),
-      body: ListView.builder(
-        itemCount: 2,
-        itemBuilder: (context, index){
-        if(index == 0){
-          return Card(
+      body: ListView(
+        children: <Widget>[
+          Card(
             child: ListTile(
               title: Text("Unidade:"),
               subtitle: Text(widget._ingrediente.unidade),
               leading: Icon(Icons.local_cafe)
             ),
-          );
-        }
-        return Card(
-          child: ListTile(
-            title: Text("Preço por unidade:"),
-            subtitle: Text("R\$" + widget._ingrediente.precoPorUnidade.toString()),
-            leading: Icon(Icons.monetization_on),
           ),
-        );
-      })
+          Card(
+            child: ListTile(
+              title: Text("Preço por unidade:"),
+              subtitle: Text("R\$" + widget._ingrediente.precoPorUnidade.toString()),
+              leading: Icon(Icons.monetization_on),
+            ),
+          )
+        ]
+      )
     );
   }
 }
