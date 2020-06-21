@@ -83,9 +83,11 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
 
   void abrirTelaDeAdicao(){
     if(_tabController.index == 0){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarReceita()))
-        .then((value) => {
-          null
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarReceita(widget._ingredientes)))
+        .then((receita) => {
+          if(receita != null){
+            setState((){widget._receitas.add(receita);})
+          }
       });
       return;
     }
