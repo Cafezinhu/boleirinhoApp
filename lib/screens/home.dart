@@ -53,39 +53,49 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          ListView.builder(
-            itemCount: widget._receitas.length,
-            itemBuilder: (context, index){
-              return CartaoReceita(widget._receitas[index]);
-            }
+          Scaffold(
+            body: ListView.builder(
+              itemCount: widget._receitas.length,
+              itemBuilder: (context, index){
+                return CartaoReceita(widget._receitas[index]);
+              }
+            ),
+            floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () => {
+                abrirTelaDeAdicaoDeReceita()
+              }
+            ),
           ),
-          ListView.builder(
-            itemCount: widget._ingredientes.length,
-            itemBuilder: (context, index){
-              return CartaoIngrediente(widget._ingredientes[index]);
-            }
+          Scaffold(
+            body: ListView.builder(
+              itemCount: widget._ingredientes.length,
+              itemBuilder: (context, index){
+                return CartaoIngrediente(widget._ingredientes[index]);
+              }
+            ),
+            floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () => {
+                abrirTelaDeAdicaoDeIngrediente()
+              }
+            ),
           )
-      ],),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => {
-          abrirTelaDeAdicao()
-        }
+        ],
       ),
     );
   }
 
-  void abrirTelaDeAdicao(){
-    if(_tabController.index == 0){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarReceita(widget._ingredientes)))
-        .then((receita) => {
-          if(receita != null){
-            setState((){widget._receitas.add(receita);}),
-          }
-      });
-      return;
-    }
+  void abrirTelaDeAdicaoDeReceita(){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarReceita(widget._ingredientes)))
+      .then((receita) => {
+        if(receita != null){
+          setState((){widget._receitas.add(receita);}),
+        }
+    });
+  }
 
+  void abrirTelaDeAdicaoDeIngrediente(){
     Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarIngrediente()))
       .then((ingrediente) => {
         if(ingrediente != null){
