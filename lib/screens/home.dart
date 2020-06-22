@@ -25,10 +25,6 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    //TODO: remover estar 3 linhas
-    widget._ingredientes.add(Ingrediente("Chocolate", 1.00, "g"));
-    widget._ingredientesNaReceita.add(IngredienteNaReceita(widget._ingredientes[0], 500));
-    widget._receitas.add(Receita("Bolo de chocolate", "bla bla bla", 15.00, widget._ingredientesNaReceita));
   }
 
   @override
@@ -86,7 +82,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
       Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarReceita(widget._ingredientes)))
         .then((receita) => {
           if(receita != null){
-            setState((){widget._receitas.add(receita);})
+            setState((){widget._receitas.add(receita);}),
           }
       });
       return;
@@ -95,7 +91,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
     Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarIngrediente()))
       .then((ingrediente) => {
         if(ingrediente != null){
-          setState((){widget._ingredientes.add(ingrediente);})
+          setState((){widget._ingredientes.add(ingrediente);}),
         }
     });
   }
