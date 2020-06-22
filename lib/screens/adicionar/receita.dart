@@ -30,7 +30,11 @@ class _AdicionarReceitaState extends State<AdicionarReceita> {
           onPressed: (){
             Navigator.pop(context, ingrediente);
           },
-          child: Text(ingrediente.nome)
+          child: Text(ingrediente.nome, 
+            style: TextStyle(
+              fontSize: 24.0
+            )
+          )
         )
       );
     }
@@ -70,7 +74,11 @@ class _AdicionarReceitaState extends State<AdicionarReceita> {
                 Card(
                   child: ListTile(
                     leading: Icon(Icons.local_cafe),
-                    title: Text("Ingredientes:"),
+                    title: Text("Ingredientes:",
+                      style: TextStyle(
+                        fontSize: 24.0
+                      )
+                    ,),
                   ),
                 )
               ],
@@ -82,7 +90,11 @@ class _AdicionarReceitaState extends State<AdicionarReceita> {
                   ListTile(
                     leading: Icon(Icons.local_cafe),
                     trailing: Icon(Icons.edit),
-                    title: Text(widget._ingredientesNaReceita[index-1].ingrediente.nome),
+                    title: Text(widget._ingredientesNaReceita[index-1].ingrediente.nome,
+                      style: TextStyle(
+                        fontSize: 24.0
+                      )
+                    ),
                     onTap: () {
                       abrirSelecaoIngrediente("Editar Ingrediente")
                         .then(
@@ -106,6 +118,9 @@ class _AdicionarReceitaState extends State<AdicionarReceita> {
                           + ")"),
                         hintText: widget._ingredientesNaReceita[index-1].ingrediente.unidade == "unidade" ? "0" : "0.00"
                       ),
+                      style: TextStyle(
+                        fontSize: 24.0
+                      ),
                       keyboardType: TextInputType.number,
                       onChanged: (valor){
                         setState(() {
@@ -117,7 +132,11 @@ class _AdicionarReceitaState extends State<AdicionarReceita> {
                   ),
                   ListTile(
                     leading: Icon(Icons.monetization_on),
-                    title: Text("Custo: " + widget._ingredientesNaReceita[index-1].precoExtensao())
+                    title: Text("Custo: " + widget._ingredientesNaReceita[index-1].precoExtensao(),
+                      style: TextStyle(
+                          fontSize: 24.0
+                        )
+                    )
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -191,7 +210,11 @@ class _AdicionarReceitaState extends State<AdicionarReceita> {
               Card(
                 child: ListTile(
                   leading: Icon(Icons.monetization_on),
-                  title: Text("Custo total: R\$" + widget._custoTotal.toString()),
+                  title: Text("Custo total: R\$" + widget._custoTotal.toString(),
+                    style: TextStyle(
+                      fontSize: 24.0
+                    )
+                  ),
                 ),
               ),
               Padding(

@@ -94,7 +94,11 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
             child: Column(
               children: <Widget>[
                 ListTile(
-                  title: Text("Calculadora de preço"),
+                  title: Text("Calculadora de preço", 
+                    style: TextStyle(
+                      fontSize: 24.0
+                    )
+                  ),
                   trailing: Icon(Icons.help_outline),
                   onTap: (){
 

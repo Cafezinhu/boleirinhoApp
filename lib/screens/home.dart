@@ -1,7 +1,6 @@
 import 'package:BoleirinhoApp/components/cards/ingrediente.dart';
 import 'package:BoleirinhoApp/components/cards/receita.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
-import 'package:BoleirinhoApp/models/ingrediente_na_receita.dart';
 import 'package:BoleirinhoApp/models/receita.dart';
 import 'package:BoleirinhoApp/screens/adicionar/ingrediente.dart';
 import 'package:BoleirinhoApp/screens/adicionar/receita.dart';
@@ -10,7 +9,6 @@ import 'package:flutter/material.dart';
 class Home extends StatefulWidget{
   final List<Receita> _receitas = List();
   final List<Ingrediente> _ingredientes = List();
-  final List<IngredienteNaReceita> _ingredientesNaReceita = List();
 
   @override
   State<StatefulWidget> createState() {
