@@ -14,6 +14,12 @@ class AdicionarIngrediente extends StatefulWidget {
 
 enum Unidade {unidade, g, mL}
 
+extension UnidadeExtension on Unidade{
+  String stringfy(){
+    return this.toString().split(".").last;
+  }
+}
+
 class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
   Unidade _unidade = Unidade.unidade;
   
@@ -106,7 +112,7 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
                         onChanged: _calcularPrecoPorQuantidade(),
                       ),
                       Editor(
-                        label: "Quantidade em " + _unidade.toString().split(".")[1],
+                        label: "Quantidade em " + _unidade.stringfy(),
                         hint: "0.00",
                         controller: widget._calculadoraQuantidadeController,
                         keyboardType: TextInputType.number,
@@ -119,7 +125,7 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
             ),
           ),
           Editor(
-            label: "Preço por " + _unidade.toString().split(".")[1],
+            label: "Preço por " + _unidade.stringfy(),
             hint: "0.00",
             icon: Icon(Icons.monetization_on),
             controller: widget._precoController,
@@ -157,7 +163,7 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
   void _retornarDados(BuildContext context){
     final String nome = widget._nomeController.text;
     final double preco = double.tryParse(widget._precoController.text);
-    final String unidade = _unidade.toString().split(".")[1];
+    final String unidade = _unidade.stringfy();
     if(nome != null && preco != null && unidade != null){
       Navigator.pop(context, Ingrediente(nome, preco, unidade));
     }
