@@ -112,7 +112,7 @@ class _AdicionarReceitaState extends State<AdicionarReceita> {
                           widget._ingredientesNaReceita[index-1].quantidade = double.tryParse(valor);
                           _calcularCustoTotal();
                         });
-                      } ,
+                      },
                     )
                   ),
                   ListTile(

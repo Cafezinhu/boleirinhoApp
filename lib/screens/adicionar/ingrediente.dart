@@ -12,7 +12,7 @@ class AdicionarIngrediente extends StatefulWidget {
   _AdicionarIngredienteState createState() => _AdicionarIngredienteState();
 }
 
-enum Unidade {unidade, g, mL, litro}
+enum Unidade {unidade, g, mL}
 
 class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
   Unidade _unidade = Unidade.unidade;
@@ -74,18 +74,6 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
                 title: Text("mL"),
                 leading: Radio(
                   value: Unidade.mL, 
-                  groupValue: _unidade, 
-                  onChanged: (Unidade value){
-                    setState(() {
-                      _unidade = value;
-                    });
-                  }
-                ),
-              ),
-              ListTile(
-                title: Text("L"),
-                leading: Radio(
-                  value: Unidade.litro, 
                   groupValue: _unidade, 
                   onChanged: (Unidade value){
                     setState(() {
