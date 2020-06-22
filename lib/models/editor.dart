@@ -5,8 +5,9 @@ class Editor extends StatelessWidget {
   final Icon icon;
   final TextEditingController controller;
   final TextInputType keyboardType;
+  final Function onChanged;
 
-  Editor({this.label, this.hint, this.icon, this.controller, this.keyboardType});
+  Editor({this.label, this.hint, this.icon, this.controller, this.keyboardType, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +22,7 @@ class Editor extends StatelessWidget {
         fontSize: 24.0
       ),
       keyboardType: keyboardType,
+      onChanged: onChanged,
     );
   }
 }

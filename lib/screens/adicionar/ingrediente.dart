@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class AdicionarIngrediente extends StatefulWidget {
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _precoController = TextEditingController();
+  final TextEditingController _calculadoraPrecoController = TextEditingController();
+  final TextEditingController _calculadoraQuantidadeController = TextEditingController();
   @override
   _AdicionarIngredienteState createState() => _AdicionarIngredienteState();
 }
@@ -38,7 +40,6 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
                       text: "Unidade:",
                       style: TextStyle(
                         fontSize: 24.0,
-                        
                       )
                     )
                   ),
@@ -94,8 +95,42 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
               ),
             ]
           ),
+          Card(
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  title: Text("Calculadora de preço"),
+                  trailing: Icon(Icons.help_outline),
+                  onTap: (){
+
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: <Widget>[
+                      Editor(
+                        label: "Preço do produto",
+                        hint: "0.00",
+                        controller: widget._calculadoraPrecoController,
+                        keyboardType: TextInputType.number,
+                        onChanged: _calcularPrecoPorQuantidade(),
+                      ),
+                      Editor(
+                        label: "Quantidade em " + _unidade.toString().split(".")[1],
+                        hint: "0.00",
+                        controller: widget._calculadoraQuantidadeController,
+                        keyboardType: TextInputType.number,
+                        onChanged: _calcularPrecoPorQuantidade(),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
           Editor(
-            label: "Preço por unidade",
+            label: "Preço por " + _unidade.toString().split(".")[1],
             hint: "0.00",
             icon: Icon(Icons.monetization_on),
             controller: widget._precoController,
@@ -113,6 +148,21 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
         ],
         )
     );
+  }
+
+  Function _calcularPrecoPorQuantidade(){
+    return (String _){
+      final double preco = double.tryParse(widget._calculadoraPrecoController.text);
+      final double quantidade = double.tryParse(widget._calculadoraQuantidadeController.text);
+
+      if(preco != null && quantidade != null){
+        if(preco >= 0 && quantidade > 0){
+          setState(() {
+            widget._precoController.text = ((preco/quantidade * 100).ceilToDouble()/100).toStringAsFixed(2);
+          });
+        }
+      }
+    };
   }
 
   void _retornarDados(BuildContext context){
