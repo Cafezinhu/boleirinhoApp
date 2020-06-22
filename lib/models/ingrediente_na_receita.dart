@@ -1,3 +1,5 @@
+import 'package:BoleirinhoApp/utils/math.dart';
+
 import 'ingrediente.dart';
 
 class IngredienteNaReceita{
@@ -7,7 +9,7 @@ class IngredienteNaReceita{
   IngredienteNaReceita(this.ingrediente, this.quantidade);
 
   double calcularPreco(){
-    return ingrediente.precoPorUnidade * quantidade;
+    return MathUtils.doubleRoundPrecision(ingrediente.precoPorUnidade * quantidade, 2);
   }
 
   String quantidadeExtensao(){

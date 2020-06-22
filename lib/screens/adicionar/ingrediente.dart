@@ -1,5 +1,6 @@
 import 'package:BoleirinhoApp/models/editor.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
+import 'package:BoleirinhoApp/utils/math.dart';
 import 'package:flutter/material.dart';
 
 class AdicionarIngrediente extends StatefulWidget {
@@ -158,7 +159,7 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
       if(preco != null && quantidade != null){
         if(preco >= 0 && quantidade > 0){
           setState(() {
-            widget._precoController.text = ((preco/quantidade * 100).ceilToDouble()/100).toStringAsFixed(2);
+            widget._precoController.text = MathUtils.doubleToString(preco/quantidade, 2);
           });
         }
       }
