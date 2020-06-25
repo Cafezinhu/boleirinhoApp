@@ -1,5 +1,7 @@
 import 'package:BoleirinhoApp/components/cards/ingrediente.dart';
 import 'package:BoleirinhoApp/components/cards/receita.dart';
+import 'package:BoleirinhoApp/database/dao/ingrediente_dao.dart';
+import 'package:BoleirinhoApp/database/dao/receita_dao.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
 import 'package:BoleirinhoApp/models/receita.dart';
 import 'package:BoleirinhoApp/screens/adicionar/ingrediente.dart';
@@ -18,6 +20,8 @@ class Home extends StatefulWidget{
 
 class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   TabController _tabController;
+  IngredienteDao ingredienteDao = IngredienteDao();
+  ReceitaDao receitaDao = ReceitaDao();
 
   @override
   void initState() {
@@ -68,16 +72,29 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
             ),
           ),
           Scaffold(
-            body: ListView.builder(
-              itemCount: widget._ingredientes.length,
-              itemBuilder: (context, index){
-                return CartaoIngrediente(widget._ingredientes[index]);
-              }
+            body: FutureBuilder(
+              future: ingredienteDao.findAll(),
+              builder: (context, snapshot){
+                if(snapshot.connectionState == ConnectionState.done){
+                  final List<Ingrediente> ingredientes = snapshot.data;
+                  return ListView.builder(
+                    itemCount: ingredientes.length,
+                    itemBuilder: (context, index){
+                      return CartaoIngrediente(ingredientes[index]);
+                    }
+                  );
+                }
+
+                return Center(
+                    child: CircularProgressIndicator()
+                  );
+              },
             ),
             floatingActionButton: FloatingActionButton(
               child: Icon(Icons.add),
-              onPressed: () => {
-                abrirTelaDeAdicaoDeIngrediente()
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarIngrediente()))
+                  .then((data) => {setState((){})});
               }
             ),
           )
@@ -96,11 +113,6 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   }
 
   void abrirTelaDeAdicaoDeIngrediente(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarIngrediente()))
-      .then((ingrediente) => {
-        if(ingrediente != null){
-          setState((){widget._ingredientes.add(ingrediente);}),
-        }
-    });
+    
   }
 }

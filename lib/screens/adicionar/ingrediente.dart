@@ -1,3 +1,4 @@
+import 'package:BoleirinhoApp/database/dao/ingrediente_dao.dart';
 import 'package:BoleirinhoApp/models/editor.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
 import 'package:BoleirinhoApp/utils/math.dart';
@@ -22,6 +23,7 @@ extension UnidadeExtension on Unidade{
 
 class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
   Unidade _unidade = Unidade.unidade;
+  IngredienteDao dao = IngredienteDao();
   
   @override
   Widget build(BuildContext context) {
@@ -140,7 +142,12 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
             child: RaisedButton(
               child: Text("Salvar Ingrediente"),
               onPressed: () {
-                _retornarDados(context);
+                final String nome = widget._nomeController.text;
+                final double preco = double.tryParse(widget._precoController.text);
+                final String unidade = _unidade.stringfy();
+                //if(nome != null && preco != null && unidade != null){
+                dao.save(Ingrediente(0, nome, preco, unidade)).then((id) => Navigator.pop(context));
+                //}
               }
             ),
           )
@@ -162,14 +169,5 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
         }
       }
     };
-  }
-
-  void _retornarDados(BuildContext context){
-    final String nome = widget._nomeController.text;
-    final double preco = double.tryParse(widget._precoController.text);
-    final String unidade = _unidade.stringfy();
-    if(nome != null && preco != null && unidade != null){
-      Navigator.pop(context, Ingrediente(nome, preco, unidade));
-    }
   }
 }

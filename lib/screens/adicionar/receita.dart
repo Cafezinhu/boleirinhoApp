@@ -1,3 +1,4 @@
+import 'package:BoleirinhoApp/database/dao/receita_dao.dart';
 import 'package:BoleirinhoApp/models/editor.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
 import 'package:BoleirinhoApp/models/ingrediente_na_receita.dart';
@@ -19,6 +20,7 @@ class AdicionarReceita extends StatefulWidget {
 }
 
 class _AdicionarReceitaState extends State<AdicionarReceita> {
+  ReceitaDao dao = ReceitaDao();
   List<Widget> _seletoresDeIngredientes;
   @override
   Widget build(BuildContext context) {
@@ -226,7 +228,7 @@ class _AdicionarReceitaState extends State<AdicionarReceita> {
                     double preco = widget._custoTotal;
                     List<IngredienteNaReceita> ingredientes = widget._ingredientesNaReceita;
                     if(nome != null)
-                      Navigator.pop(context, Receita(nome, instrucoes, preco, ingredientes));
+                      dao.save(Receita(0, nome, instrucoes, preco, ingredientes)).then((value) => Navigator.pop(context));
                   }, 
                   child: Text("Salvar Receita")
                 ),
