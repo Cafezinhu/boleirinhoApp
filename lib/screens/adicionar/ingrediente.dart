@@ -145,9 +145,9 @@ class _AdicionarIngredienteState extends State<AdicionarIngrediente> {
                 final String nome = widget._nomeController.text;
                 final double preco = double.tryParse(widget._precoController.text);
                 final String unidade = _unidade.stringfy();
-                //if(nome != null && preco != null && unidade != null){
-                dao.save(Ingrediente(0, nome, preco, unidade)).then((id) => Navigator.pop(context));
-                //}
+                if(nome != null && preco != null && unidade != null){
+                  dao.save(Ingrediente(0, nome, preco, unidade)).then((id) => Navigator.pop(context));
+                }
               }
             ),
           )
