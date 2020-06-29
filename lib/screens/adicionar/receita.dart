@@ -253,7 +253,7 @@ class _AdicionarReceitaState extends State<AdicionarReceita> {
       context: context,
       builder: (context){
         return SimpleDialog(
-          title: Text("Editar Ingrediente"),
+          title: Text(titulo),
           children: _seletoresDeIngredientes
         );
       }
