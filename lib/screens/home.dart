@@ -25,6 +25,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    ingredienteDao.findAll().then((ingredientes) => _ingredientes = ingredientes);
   }
 
   @override
