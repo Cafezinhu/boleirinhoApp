@@ -43,6 +43,15 @@ class IngredienteDao{
     return ingredientes;
   }
 
+  Future<List<Ingrediente>> findById(List<int> ids) async{
+    final Database db = await getDatabase();
+    final List<Map<String, dynamic>> result = await db.rawQuery('SELECT * FROM $_tableName WHERE id=?', ids);
+
+    List<Ingrediente> ingredientes = _toList(result);
+
+    return ingredientes;
+  }
+
   List<Ingrediente> _toList(List<Map<String, dynamic>> maplist){
     List<Ingrediente> ingredientes = List();
 

@@ -1,15 +1,16 @@
 import 'package:BoleirinhoApp/database/boleirinho_database.dart';
+import 'package:BoleirinhoApp/database/dao/ingredienteNaReceita_dao.dart';
 import 'package:BoleirinhoApp/models/ingrediente_na_receita.dart';
 import 'package:BoleirinhoApp/models/receita.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ReceitaDao{
   static const String tableSql = 'CREATE TABLE $_tableName('
-    '$_id INTEGER PRIMARY KEY'
+    '$_id INTEGER PRIMARY KEY, '
     '$_nome TEXT, '
     '$_instrucoes TEXT, '
     '$_ingredientes TEXT, '
-    '$_preco REAL)';
+    '$_preco TEXT)';
 
   static const String _tableName = 'receitas';
   static const String _id = 'id';
@@ -23,16 +24,19 @@ class ReceitaDao{
 
     final Map<String, dynamic> map = _toMap(receita);
 
-    return db.insert(_tableName, map);
+    int id = await db.insert(_tableName, map);
+    print("Receita salva com o id: " + id.toString());
+
+    await IngredienteNaReceitaDao().save(receita.ingredientes, id);
+
+    return id;
   }
 
   Map<String, dynamic> _toMap(Receita receita){
     Map<String, dynamic> map = Map();
     map[_nome] = receita.nome;
     map[_instrucoes] = receita.instrucoes;
-    //TODO: transformar os ingredientes usados em JSON
-    map[_ingredientes] = "";
-    map[_preco] = receita.preco;
+    map[_preco] = receita.preco.toString();
 
     return map;
   }
@@ -41,30 +45,21 @@ class ReceitaDao{
     final Database db = await getDatabase();
     final List<Map<String, dynamic>> mapList = await db.query(_tableName);
 
-    List<Receita> receitas = _toList(mapList);
+    List<Receita> receitas = await _toList(mapList);
 
     return receitas;
   }
 
-  List<Receita> _toList(List<Map<String, dynamic>> mapList){
+  Future<List<Receita>> _toList(List<Map<String, dynamic>> mapList) async{
     List<Receita> receitas = List();
 
     for(Map<String, dynamic> map in mapList){
-      //TODO: conversão de JSON para lista de IngredientesNaReceita
-      final List<IngredienteNaReceita> ingredientes = List();
-      final Receita receita = Receita(map[_id], map[_nome], map[_instrucoes], map[_preco], ingredientes);
+      final List<IngredienteNaReceita> ingredientes = await IngredienteNaReceitaDao().find(map[_id]);
+      final Receita receita = Receita(map[_id], map[_nome], map[_instrucoes], double.parse(map[_preco]), ingredientes);
 
       receitas.add(receita);
     }
 
     return receitas;
-  }
-
-  String _ingredientesToJSON(List<IngredienteNaReceita> ingredientes){
-
-  }
-
-  List<IngredienteNaReceita> _jsonToIngredientes(String json){
-    
   }
 }

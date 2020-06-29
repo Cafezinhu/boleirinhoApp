@@ -9,9 +9,6 @@ import 'package:BoleirinhoApp/screens/adicionar/receita.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget{
-  final List<Receita> _receitas = List();
-  final List<Ingrediente> _ingredientes = List();
-
   @override
   State<StatefulWidget> createState() {
     return HomeState();
@@ -22,6 +19,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   TabController _tabController;
   IngredienteDao ingredienteDao = IngredienteDao();
   ReceitaDao receitaDao = ReceitaDao();
+  List<Ingrediente> _ingredientes = List();
 
   @override
   void initState() {
@@ -58,10 +56,21 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
         controller: _tabController,
         children: <Widget>[
           Scaffold(
-            body: ListView.builder(
-              itemCount: widget._receitas.length,
-              itemBuilder: (context, index){
-                return CartaoReceita(widget._receitas[index]);
+            body: FutureBuilder(
+              future: receitaDao.findAll(),
+              builder: (context, snapshot){
+                if(snapshot.connectionState == ConnectionState.done){
+                  final List<Receita> receitas = snapshot.data;
+                  return ListView.builder(
+                    itemCount: receitas.length,
+                    itemBuilder: (context, index){
+                      return CartaoReceita(receitas[index]);
+                    }
+                  );
+                }
+                return Center(
+                    child: CircularProgressIndicator()
+                );
               }
             ),
             floatingActionButton: FloatingActionButton(
@@ -76,18 +85,18 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
               future: ingredienteDao.findAll(),
               builder: (context, snapshot){
                 if(snapshot.connectionState == ConnectionState.done){
-                  final List<Ingrediente> ingredientes = snapshot.data;
+                  _ingredientes = snapshot.data;
                   return ListView.builder(
-                    itemCount: ingredientes.length,
+                    itemCount: _ingredientes.length,
                     itemBuilder: (context, index){
-                      return CartaoIngrediente(ingredientes[index]);
+                      return CartaoIngrediente(_ingredientes[index]);
                     }
                   );
                 }
 
                 return Center(
                     child: CircularProgressIndicator()
-                  );
+                );
               },
             ),
             floatingActionButton: FloatingActionButton(
@@ -104,12 +113,8 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   }
 
   void abrirTelaDeAdicaoDeReceita(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarReceita(widget._ingredientes)))
-      .then((receita) => {
-        if(receita != null){
-          setState((){widget._receitas.add(receita);}),
-        }
-    });
+    Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarReceita(_ingredientes)))
+      .then((data) => setState((){}));
   }
 
   void abrirTelaDeAdicaoDeIngrediente(){
