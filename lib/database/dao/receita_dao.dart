@@ -9,15 +9,13 @@ class ReceitaDao {
       '$_id INTEGER PRIMARY KEY, '
       '$_nome TEXT, '
       '$_instrucoes TEXT, '
-      '$_ingredientes TEXT, '
-      '$_preco TEXT)';
+      '$_ingredientes TEXT)';
 
   static const String _tableName = 'receitas';
   static const String _id = 'id';
   static const String _nome = 'nome';
   static const String _instrucoes = 'instrucoes';
   static const String _ingredientes = 'ingredientes';
-  static const String _preco = 'preco';
 
   Future<int> save(Receita receita) async {
     final Database db = await getDatabase();
@@ -36,7 +34,6 @@ class ReceitaDao {
     Map<String, dynamic> map = Map();
     map[_nome] = receita.nome;
     map[_instrucoes] = receita.instrucoes;
-    map[_preco] = receita.preco.toString();
 
     return map;
   }
@@ -74,8 +71,8 @@ class ReceitaDao {
     for (Map<String, dynamic> map in mapList) {
       final List<IngredienteNaReceita> ingredientes =
           await IngredienteNaReceitaDao().find(map[_id]);
-      final Receita receita = Receita(map[_id], map[_nome], map[_instrucoes],
-          double.parse(map[_preco]), ingredientes);
+      final Receita receita =
+          Receita(map[_id], map[_nome], map[_instrucoes], ingredientes);
 
       receitas.add(receita);
     }

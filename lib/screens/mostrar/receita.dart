@@ -25,7 +25,7 @@ class _MostrarReceitaState extends State<MostrarReceita> {
                   Card(
                     child: ListTile(
                       title: Text("Preço total: R\$" +
-                          widget._receita.preco.toString()),
+                          widget._receita.calcularPreco().toString()),
                       leading: Icon(Icons.monetization_on),
                     ),
                   ),

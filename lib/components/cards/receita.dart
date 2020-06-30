@@ -10,11 +10,12 @@ class CartaoReceita extends StatelessWidget {
     return Card(
       child: ListTile(
         title: Text(_receita.nome),
-        subtitle: Text("R\$" + _receita.preco.toString()),
+        subtitle: Text("R\$" + _receita.calcularPreco().toString()),
         leading: Icon(Icons.cake),
         onTap: () => {
           //chama a tela de receita
-          Navigator.push(context, MaterialPageRoute(builder: (context) => MostrarReceita(_receita)))
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => MostrarReceita(_receita)))
         },
       ),
     );
