@@ -2,10 +2,11 @@ import 'package:BoleirinhoApp/database/dao/ingredienteNaReceita_dao.dart';
 import 'package:BoleirinhoApp/database/dao/ingrediente_dao.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
 import 'package:BoleirinhoApp/models/receita.dart';
+import 'package:BoleirinhoApp/screens/adicionar/ingrediente.dart';
 import 'package:flutter/material.dart';
 
 class MostrarIngrediente extends StatefulWidget {
-  final Ingrediente _ingrediente;
+  Ingrediente _ingrediente;
   MostrarIngrediente(this._ingrediente);
   @override
   _MostrarIngredienteState createState() => _MostrarIngredienteState();
@@ -19,7 +20,17 @@ class _MostrarIngredienteState extends State<MostrarIngrediente> {
         title: Text(widget._ingrediente.nome),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => IngredienteForm(
+                        modo: Modo.edicao,
+                        ingrediente: widget._ingrediente,
+                      ))).then((ingrediente) => setState(() {
+                if (ingrediente != null) widget._ingrediente = ingrediente;
+              }));
+        },
         child: Icon(Icons.edit),
       ),
       body: ListView(

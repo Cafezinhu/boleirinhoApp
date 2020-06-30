@@ -68,4 +68,13 @@ class IngredienteDao {
 
     return await db.rawDelete('DELETE FROM $_tableName WHERE $_id=?', [id]);
   }
+
+  Future<int> update(Ingrediente ingrediente) async {
+    Database db = await getDatabase();
+
+    final Map<String, dynamic> map = _toMap(ingrediente);
+
+    return await db
+        .update(_tableName, map, where: '$_id=?', whereArgs: [ingrediente.id]);
+  }
 }

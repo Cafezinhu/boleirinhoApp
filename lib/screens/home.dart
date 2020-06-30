@@ -8,14 +8,14 @@ import 'package:BoleirinhoApp/screens/adicionar/ingrediente.dart';
 import 'package:BoleirinhoApp/screens/adicionar/receita.dart';
 import 'package:flutter/material.dart';
 
-class Home extends StatefulWidget{
+class Home extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return HomeState();
   }
 }
 
-class HomeState extends State<Home> with SingleTickerProviderStateMixin{
+class HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TabController _tabController;
   IngredienteDao ingredienteDao = IngredienteDao();
   ReceitaDao receitaDao = ReceitaDao();
@@ -25,7 +25,9 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    ingredienteDao.findAll().then((ingredientes) => _ingredientes = ingredientes);
+    ingredienteDao
+        .findAll()
+        .then((ingredientes) => _ingredientes = ingredientes);
   }
 
   @override
@@ -39,86 +41,77 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
     return Scaffold(
       appBar: AppBar(
         title: Text("Boleirinho"),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: <Widget>[
-            Tab(
-              icon: Icon(Icons.cake),
-              text: "Receitas",
-            ),
-            Tab(
-              icon: Icon(Icons.local_cafe),
-              text: "Ingredientes",
-            )
-          ]
+        bottom: TabBar(controller: _tabController, tabs: <Widget>[
+          Tab(
+            icon: Icon(Icons.cake),
+            text: "Receitas",
           ),
+          Tab(
+            icon: Icon(Icons.local_cafe),
+            text: "Ingredientes",
+          )
+        ]),
       ),
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
           Scaffold(
             body: FutureBuilder(
-              future: receitaDao.findAll(),
-              builder: (context, snapshot){
-                if(snapshot.connectionState == ConnectionState.done){
-                  final List<Receita> receitas = snapshot.data;
-                  return ListView.builder(
-                    itemCount: receitas.length,
-                    itemBuilder: (context, index){
-                      return CartaoReceita(receitas[index]);
-                    }
-                  );
-                }
-                return Center(
-                    child: CircularProgressIndicator()
-                );
-              }
-            ),
+                future: receitaDao.findAll(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    final List<Receita> receitas = snapshot.data;
+                    return ListView.builder(
+                        itemCount: receitas.length,
+                        itemBuilder: (context, index) {
+                          return CartaoReceita(receitas[index]);
+                        });
+                  }
+                  return Center(child: CircularProgressIndicator());
+                }),
             floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () => {
-                abrirTelaDeAdicaoDeReceita()
-              }
-            ),
+                child: Icon(Icons.add),
+                onPressed: () => {abrirTelaDeAdicaoDeReceita()}),
           ),
           Scaffold(
             body: FutureBuilder(
               future: ingredienteDao.findAll(),
-              builder: (context, snapshot){
-                if(snapshot.connectionState == ConnectionState.done){
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
                   _ingredientes = snapshot.data;
                   return ListView.builder(
-                    itemCount: _ingredientes.length,
-                    itemBuilder: (context, index){
-                      return CartaoIngrediente(_ingredientes[index]);
-                    }
-                  );
+                      itemCount: _ingredientes.length,
+                      itemBuilder: (context, index) {
+                        return CartaoIngrediente(_ingredientes[index]);
+                      });
                 }
 
-                return Center(
-                    child: CircularProgressIndicator()
-                );
+                return Center(child: CircularProgressIndicator());
               },
             ),
             floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarIngrediente()))
-                  .then((data) => {setState((){})});
-              }
-            ),
+                child: Icon(Icons.add),
+                onPressed: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  IngredienteForm(modo: Modo.adicao)))
+                      .then((data) => {setState(() {})});
+                }),
           )
         ],
       ),
     );
   }
 
-  void abrirTelaDeAdicaoDeReceita(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => AdicionarReceita(_ingredientes)))
-      .then((data) => setState((){}));
+  void abrirTelaDeAdicaoDeReceita() {
+    Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => AdicionarReceita(_ingredientes)))
+        .then((data) => setState(() {}));
   }
 
-  void abrirTelaDeAdicaoDeIngrediente(){
-    
-  }
+  void abrirTelaDeAdicaoDeIngrediente() {}
 }
