@@ -82,4 +82,16 @@ class ReceitaDao {
 
     return receitas;
   }
+
+  Future<int> delete(int id) async {
+    Database db = await getDatabase();
+
+    int changes = 0;
+
+    changes += await db.rawDelete('DELETE FROM $_tableName WHERE $_id=?', [id]);
+
+    changes += await IngredienteNaReceitaDao().delete(id);
+
+    return changes;
+  }
 }

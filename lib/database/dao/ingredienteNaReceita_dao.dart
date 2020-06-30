@@ -83,4 +83,11 @@ class IngredienteNaReceitaDao {
 
     return mapList;
   }
+
+  Future<int> delete(int id) async {
+    Database db = await getDatabase();
+
+    return await db
+        .rawDelete('DELETE FROM $_tableName WHERE $_receitaId=?', [id]);
+  }
 }
