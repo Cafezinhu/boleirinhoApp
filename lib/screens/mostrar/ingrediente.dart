@@ -92,6 +92,14 @@ class _MostrarIngredienteState extends State<MostrarIngrediente> {
                                     "Não foi possível apagar ${widget._ingrediente.nome}"),
                                 content: Text(
                                     "${widget._ingrediente.nome} está sendo usado em$receitasString"),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Ok"),
+                                  )
+                                ],
                               );
                             },
                           );
