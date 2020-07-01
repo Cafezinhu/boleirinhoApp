@@ -205,6 +205,9 @@ class _ReceitaFormState extends State<ReceitaForm> {
                                   setState(() {
                                     widget._ingredientesNaReceita.remove(widget
                                         ._ingredientesNaReceita[index - 1]);
+                                    widget._controladoresIngredientes.remove(
+                                        widget._controladoresIngredientes[
+                                            index - 1]);
                                     _calcularCustoTotal();
                                   });
                                 }
@@ -227,6 +230,8 @@ class _ReceitaFormState extends State<ReceitaForm> {
                                     if (ingrediente != null)
                                       {
                                         setState(() {
+                                          widget._controladoresIngredientes
+                                              .add(TextEditingController());
                                           widget._ingredientesNaReceita.add(
                                               IngredienteNaReceita(
                                                   ingrediente: ingrediente,
@@ -264,11 +269,10 @@ class _ReceitaFormState extends State<ReceitaForm> {
                                       0, nome, instrucoes, ingredientes))
                                   .then((value) => Navigator.pop(context));
                             } else {
-                              Receita r = Receita(widget.receita.id, nome,
-                                  instrucoes, ingredientes);
-                              dao.update(r).then((value) => Navigator.pop(
-                                    context, r
-                                  ));
+                              Receita novaReceita = Receita(widget.receita.id,
+                                  nome, instrucoes, ingredientes);
+                              dao.update(novaReceita).then((value) =>
+                                  Navigator.pop(context, novaReceita));
                             }
                           }
                         },

@@ -69,18 +69,34 @@ class _ReceitasTabState extends State<ReceitasTab> {
                         ]))))
                   }
                 else
-                  {abrirTelaDeAdicaoDeReceita()}
+                  abrirTelaDeAdicaoDeReceita(context)
               }),
     );
   }
 
-  void abrirTelaDeAdicaoDeReceita() {
+  void abrirTelaDeAdicaoDeReceita(BuildContext ctx) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => ReceitaForm(
                   ingredientes: widget._ingredientes,
                   modo: Modo.adicao,
-                ))).then((data) => setState(() {}));
+                ))).then((receita) => setState(() {
+          if (receita != null) {
+            Scaffold.of(ctx).showSnackBar(
+              SnackBar(
+                  backgroundColor: Colors.green,
+                  content: RichText(
+                      text: TextSpan(children: [
+                    TextSpan(text: "Receita "),
+                    TextSpan(
+                      text: receita.nome,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: " adicionada com sucesso!")
+                  ]))),
+            );
+          }
+        }));
   }
 }

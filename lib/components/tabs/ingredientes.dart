@@ -39,16 +39,34 @@ class _IngredientesTabState extends State<IngredientesTab> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            abrirTelaAdicaoIngrediente();
+            abrirTelaAdicaoIngrediente(context);
           }),
     );
   }
 
-  void abrirTelaAdicaoIngrediente() {
+  void abrirTelaAdicaoIngrediente(BuildContext ctx) {
     Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => IngredienteForm(modo: Modo.adicao)))
-        .then((data) => {setState(() {})});
+        .then((ingrediente) => {
+              setState(() {
+                if (ingrediente != null) {
+                  Scaffold.of(ctx).showSnackBar(
+                    SnackBar(
+                        backgroundColor: Colors.green,
+                        content: RichText(
+                            text: TextSpan(children: [
+                          TextSpan(text: "Ingrediente "),
+                          TextSpan(
+                            text: ingrediente.nome,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(text: " adicionado com sucesso!")
+                        ]))),
+                  );
+                }
+              })
+            });
   }
 }
