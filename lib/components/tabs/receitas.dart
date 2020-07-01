@@ -57,15 +57,16 @@ class _ReceitasTabState extends State<ReceitasTab> {
                 if (widget._ingredientes.length == 0)
                   {
                     Scaffold.of(context).showSnackBar(SnackBar(
+                        backgroundColor: Colors.orange,
                         content: RichText(
                             text: TextSpan(children: [
-                      TextSpan(text: "Adicione um "),
-                      WidgetSpan(child: Icon(Icons.local_cafe)),
-                      TextSpan(
-                          text: " Ingrediente",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      TextSpan(text: " primeiro!")
-                    ]))))
+                          TextSpan(text: "Adicione um "),
+                          WidgetSpan(child: Icon(Icons.local_cafe)),
+                          TextSpan(
+                              text: " Ingrediente",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: " primeiro!")
+                        ]))))
                   }
                 else
                   {abrirTelaDeAdicaoDeReceita()}
