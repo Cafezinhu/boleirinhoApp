@@ -23,7 +23,6 @@ class ReceitaDao {
     final Map<String, dynamic> map = _toMap(receita);
 
     int id = await db.insert(_tableName, map);
-    print("Receita salva com o id: " + id.toString());
 
     await IngredienteNaReceitaDao().save(receita.ingredientes, id);
 
@@ -55,7 +54,6 @@ class ReceitaDao {
     }
     if (sqlCondition.length > 0) {
       sqlCondition = sqlCondition.substring(0, sqlCondition.length - 4);
-      print("sqlCondition: $sqlCondition");
       final List<Map<String, dynamic>> result =
           await db.rawQuery('SELECT * FROM $_tableName WHERE $sqlCondition');
 
@@ -90,5 +88,14 @@ class ReceitaDao {
     changes += await IngredienteNaReceitaDao().delete(id);
 
     return changes;
+  }
+
+  Future<int> update(Receita receita) async {
+    Database db = await getDatabase();
+    Map<String, dynamic> map = _toMap(receita);
+
+    await db.update(_tableName, map, where: '$_id=?', whereArgs: [receita.id]);
+    return await IngredienteNaReceitaDao()
+        .update(receita.ingredientes, receita.id);
   }
 }

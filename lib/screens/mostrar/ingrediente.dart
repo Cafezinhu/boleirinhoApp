@@ -1,5 +1,6 @@
 import 'package:BoleirinhoApp/database/dao/ingredienteNaReceita_dao.dart';
 import 'package:BoleirinhoApp/database/dao/ingrediente_dao.dart';
+import 'package:BoleirinhoApp/models/enums/modo.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
 import 'package:BoleirinhoApp/models/receita.dart';
 import 'package:BoleirinhoApp/screens/adicionar/ingrediente.dart';

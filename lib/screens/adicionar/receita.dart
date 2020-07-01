@@ -1,31 +1,50 @@
 import 'package:BoleirinhoApp/database/dao/receita_dao.dart';
 import 'package:BoleirinhoApp/models/editor.dart';
+import 'package:BoleirinhoApp/models/enums/modo.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
 import 'package:BoleirinhoApp/models/ingrediente_na_receita.dart';
 import 'package:BoleirinhoApp/models/receita.dart';
 import 'package:flutter/material.dart';
 
-class AdicionarReceita extends StatefulWidget {
+class ReceitaForm extends StatefulWidget {
   TextEditingController _nomeController = TextEditingController();
   TextEditingController _instrucoesController = TextEditingController();
   List<IngredienteNaReceita> _ingredientesNaReceita = List();
-  List<Ingrediente> _ingredientes;
+  List<Ingrediente> ingredientes;
   double _custoTotal = 0.0;
+  List<TextEditingController> _controladoresIngredientes = List();
 
-  AdicionarReceita(this._ingredientes);
+  Modo modo;
+  Receita receitaRecebida, receita;
+  ReceitaForm({this.ingredientes, this.modo, this.receita});
 
   @override
-  _AdicionarReceitaState createState() => _AdicionarReceitaState();
+  _ReceitaFormState createState() {
+    if (modo == Modo.edicao) {
+      receitaRecebida = Receita.clone(receita);
+      _nomeController.text = receitaRecebida.nome;
+      _instrucoesController.text = receitaRecebida.instrucoes;
+      _ingredientesNaReceita = receitaRecebida.ingredientes;
+      _custoTotal = receitaRecebida.calcularPreco();
+      for (IngredienteNaReceita i in _ingredientesNaReceita) {
+        TextEditingController controller = TextEditingController();
+        controller.text = i.quantidade.toString();
+        _controladoresIngredientes.add(controller);
+      }
+    }
+    return _ReceitaFormState();
+  }
 }
 
-class _AdicionarReceitaState extends State<AdicionarReceita> {
+class _ReceitaFormState extends State<ReceitaForm> {
   ReceitaDao dao = ReceitaDao();
   List<Widget> _seletoresDeIngredientes;
+
   @override
   Widget build(BuildContext context) {
     _seletoresDeIngredientes = List();
 
-    for (Ingrediente ingrediente in widget._ingredientes) {
+    for (Ingrediente ingrediente in widget.ingredientes) {
       _seletoresDeIngredientes.add(SimpleDialogOption(
           onPressed: () {
             Navigator.pop(context, ingrediente);
@@ -101,6 +120,8 @@ class _AdicionarReceitaState extends State<AdicionarReceita> {
                       Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextField(
+                            controller:
+                                widget._controladoresIngredientes[index - 1],
                             decoration: InputDecoration(
                                 labelText: widget
                                             ._ingredientesNaReceita[index - 1]
@@ -123,9 +144,15 @@ class _AdicionarReceitaState extends State<AdicionarReceita> {
                             keyboardType: TextInputType.number,
                             onChanged: (valor) {
                               setState(() {
-                                widget._ingredientesNaReceita[index - 1]
-                                    .quantidade = double.tryParse(valor);
-                                _calcularCustoTotal();
+                                if (valor != null) {
+                                  widget._ingredientesNaReceita[index - 1]
+                                      .quantidade = double.tryParse(valor);
+                                  _calcularCustoTotal();
+                                } else {
+                                  widget._ingredientesNaReceita[index - 1]
+                                      .quantidade = 0;
+                                  _calcularCustoTotal();
+                                }
                               });
                             },
                           )),
@@ -202,7 +229,8 @@ class _AdicionarReceitaState extends State<AdicionarReceita> {
                                         setState(() {
                                           widget._ingredientesNaReceita.add(
                                               IngredienteNaReceita(
-                                                  ingrediente, 0.0));
+                                                  ingrediente: ingrediente,
+                                                  quantidade: 0.0));
                                         })
                                       }
                                   });
@@ -229,11 +257,20 @@ class _AdicionarReceitaState extends State<AdicionarReceita> {
                                   : "";
                           List<IngredienteNaReceita> ingredientes =
                               widget._ingredientesNaReceita;
-                          if (nome != null)
-                            dao
-                                .save(
-                                    Receita(0, nome, instrucoes, ingredientes))
-                                .then((value) => Navigator.pop(context));
+                          if (nome != null) {
+                            if (widget.modo == Modo.adicao) {
+                              dao
+                                  .save(Receita(
+                                      0, nome, instrucoes, ingredientes))
+                                  .then((value) => Navigator.pop(context));
+                            } else {
+                              Receita r = Receita(widget.receita.id, nome,
+                                  instrucoes, ingredientes);
+                              dao.update(r).then((value) => Navigator.pop(
+                                    context, r
+                                  ));
+                            }
+                          }
                         },
                         child: Text("Salvar Receita")),
                   )

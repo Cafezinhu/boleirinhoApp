@@ -1,0 +1,1 @@
+enum Modo { adicao, edicao }

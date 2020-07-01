@@ -2,6 +2,7 @@ import 'package:BoleirinhoApp/components/cards/ingrediente.dart';
 import 'package:BoleirinhoApp/components/cards/receita.dart';
 import 'package:BoleirinhoApp/database/dao/ingrediente_dao.dart';
 import 'package:BoleirinhoApp/database/dao/receita_dao.dart';
+import 'package:BoleirinhoApp/models/enums/modo.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
 import 'package:BoleirinhoApp/models/receita.dart';
 import 'package:BoleirinhoApp/screens/adicionar/ingrediente.dart';
@@ -64,7 +65,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     return ListView.builder(
                         itemCount: receitas.length,
                         itemBuilder: (context, index) {
-                          return CartaoReceita(receitas[index]);
+                          return CartaoReceita(receitas[index], _ingredientes);
                         });
                   }
                   return Center(child: CircularProgressIndicator());
@@ -107,10 +108,11 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   void abrirTelaDeAdicaoDeReceita() {
     Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AdicionarReceita(_ingredientes)))
-        .then((data) => setState(() {}));
+        context,
+        MaterialPageRoute(
+            builder: (context) => ReceitaForm(
+                  ingredientes: _ingredientes,
+                ))).then((data) => setState(() {}));
   }
 
   void abrirTelaDeAdicaoDeIngrediente() {}

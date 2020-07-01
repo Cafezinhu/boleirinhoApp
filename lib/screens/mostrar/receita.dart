@@ -1,11 +1,15 @@
 import 'package:BoleirinhoApp/components/cards/ingrediente_na_receita.dart';
 import 'package:BoleirinhoApp/database/dao/receita_dao.dart';
+import 'package:BoleirinhoApp/models/enums/modo.dart';
+import 'package:BoleirinhoApp/models/ingrediente.dart';
 import 'package:BoleirinhoApp/models/receita.dart';
+import 'package:BoleirinhoApp/screens/adicionar/receita.dart';
 import 'package:flutter/material.dart';
 
 class MostrarReceita extends StatefulWidget {
-  final Receita _receita;
-  MostrarReceita(this._receita);
+  final List<Ingrediente> ingredientes;
+  Receita _receita;
+  MostrarReceita(this._receita, this.ingredientes);
   @override
   _MostrarReceitaState createState() => _MostrarReceitaState();
 }
@@ -14,9 +18,24 @@ class _MostrarReceitaState extends State<MostrarReceita> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget._receita.nome)),
-        floatingActionButton:
-            FloatingActionButton(onPressed: null, child: Icon(Icons.edit)),
+        appBar: AppBar(
+          title: Text(widget._receita.nome),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReceitaForm(
+                            ingredientes: widget.ingredientes,
+                            modo: Modo.edicao,
+                            receita: widget._receita)))
+                .then((receita) => setState(() {
+                      if (receita != null) widget._receita = receita;
+                    }));
+          },
+          child: Icon(Icons.edit),
+        ),
         body: ListView.builder(
             itemCount: widget._receita.ingredientes.length + 2,
             itemBuilder: (context, index) {

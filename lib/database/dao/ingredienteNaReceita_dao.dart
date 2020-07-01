@@ -49,8 +49,10 @@ class IngredienteNaReceitaDao {
       List<Ingrediente> ingredientes =
           await IngredienteDao().findById([map[_ingredienteId]]);
       Ingrediente ingrediente = ingredientes[0];
-      list.add(
-          IngredienteNaReceita(ingrediente, double.parse(map[_quantidade])));
+      list.add(IngredienteNaReceita(
+          id: map[_id],
+          ingrediente: ingrediente,
+          quantidade: double.parse(map[_quantidade])));
     }
 
     return list;
@@ -89,5 +91,14 @@ class IngredienteNaReceitaDao {
 
     return await db
         .rawDelete('DELETE FROM $_tableName WHERE $_receitaId=?', [id]);
+  }
+
+  Future<int> update(
+      List<IngredienteNaReceita> ingredientes, int receitaId) async {
+    await delete(receitaId);
+
+    await save(ingredientes, receitaId);
+
+    return 1;
   }
 }

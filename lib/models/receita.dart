@@ -14,4 +14,15 @@ class Receita {
     }
     return preco;
   }
+
+  static Receita clone(Receita receita) {
+    List<IngredienteNaReceita> novosIngredientes = List();
+    for (IngredienteNaReceita ingrediente in receita.ingredientes) {
+      novosIngredientes.add(IngredienteNaReceita.clone(ingrediente));
+    }
+
+    Receita novaReceita = Receita(
+        receita.id, receita.nome, receita.instrucoes, novosIngredientes);
+    return novaReceita;
+  }
 }

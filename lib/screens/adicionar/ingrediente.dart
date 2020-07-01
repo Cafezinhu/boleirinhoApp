@@ -1,5 +1,7 @@
 import 'package:BoleirinhoApp/database/dao/ingrediente_dao.dart';
 import 'package:BoleirinhoApp/models/editor.dart';
+import 'package:BoleirinhoApp/models/enums/modo.dart';
+import 'package:BoleirinhoApp/models/enums/unidade.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
 import 'package:BoleirinhoApp/utils/math.dart';
 import 'package:flutter/material.dart';
@@ -27,25 +29,6 @@ class IngredienteForm extends StatefulWidget {
       _unidade = UnidadeExtension.fromString(ingrediente.unidade);
     }
     return _IngredienteFormState();
-  }
-}
-
-enum Modo { adicao, edicao }
-
-enum Unidade { unidade, g, mL }
-
-extension UnidadeExtension on Unidade {
-  String stringfy() {
-    return this.toString().split(".").last;
-  }
-
-  static Unidade fromString(String s) {
-    for (Unidade unidade in Unidade.values) {
-      if (unidade.stringfy() == s) {
-        return unidade;
-      }
-    }
-    return Unidade.unidade;
   }
 }
 
