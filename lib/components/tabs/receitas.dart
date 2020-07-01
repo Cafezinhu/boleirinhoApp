@@ -84,6 +84,7 @@ class _ReceitasTabState extends State<ReceitasTab> {
                   modo: Modo.adicao,
                 ))).then((receita) => setState(() {
           if (receita != null) {
+            print("tentei chamar snackbar");
             Scaffold.of(ctx).showSnackBar(
               SnackBar(
                   backgroundColor: Colors.green,

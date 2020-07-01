@@ -7,15 +7,28 @@ class CartaoIngrediente extends StatelessWidget {
   CartaoIngrediente(this._ingrediente);
   @override
   Widget build(BuildContext context) {
+    ScaffoldState scaffold = Scaffold.of(context);
     return Card(
       child: ListTile(
         title: Text(_ingrediente.nome),
-        subtitle: Text("R\$" + _ingrediente.precoPorUnidade.toString() + " por " + _ingrediente.unidade),
+        subtitle: Text("R\$" +
+            _ingrediente.precoPorUnidade.toString() +
+            " por " +
+            _ingrediente.unidade),
         leading: Icon(Icons.local_cafe),
         onTap: () => {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>
-            MostrarIngrediente(_ingrediente)
-          ))
+          Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (ctx) => MostrarIngrediente(_ingrediente)))
+              .then((value) {
+            if (value != null) {
+              scaffold.showSnackBar(SnackBar(
+                backgroundColor: Colors.green,
+                content: Text("Ingrediente excluído com sucesso!"),
+              ));
+            }
+          })
         },
       ),
     );

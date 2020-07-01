@@ -144,9 +144,10 @@ class _IngredienteFormState extends State<IngredienteForm> {
                     final String unidade = widget._unidade.stringfy();
                     if (nome != null && preco != null && unidade != null) {
                       if (widget.modo == Modo.adicao) {
-                        dao
-                            .save(Ingrediente(0, nome, preco, unidade))
-                            .then((id) => Navigator.pop(context));
+                        Ingrediente novoIngrediente =
+                            Ingrediente(0, nome, preco, unidade);
+                        dao.save(novoIngrediente).then(
+                            (id) => Navigator.pop(context, novoIngrediente));
                       } else {
                         Ingrediente novoIngrediente =
                             Ingrediente(widget._id, nome, preco, unidade);

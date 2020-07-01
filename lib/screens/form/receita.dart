@@ -264,10 +264,10 @@ class _ReceitaFormState extends State<ReceitaForm> {
                               widget._ingredientesNaReceita;
                           if (nome != null) {
                             if (widget.modo == Modo.adicao) {
-                              dao
-                                  .save(Receita(
-                                      0, nome, instrucoes, ingredientes))
-                                  .then((value) => Navigator.pop(context));
+                              Receita novaReceita =
+                                  Receita(0, nome, instrucoes, ingredientes);
+                              dao.save(novaReceita).then((value) =>
+                                  Navigator.pop(context, novaReceita));
                             } else {
                               Receita novaReceita = Receita(widget.receita.id,
                                   nome, instrucoes, ingredientes);

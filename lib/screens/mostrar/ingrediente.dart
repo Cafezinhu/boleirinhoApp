@@ -13,6 +13,35 @@ class MostrarIngrediente extends StatefulWidget {
   _MostrarIngredienteState createState() => _MostrarIngredienteState();
 }
 
+class BotaoEditarIngrediente extends StatelessWidget {
+  Ingrediente _ingrediente;
+  Function _callback;
+  BotaoEditarIngrediente(this._ingrediente, this._callback);
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (ctx) => IngredienteForm(
+                      modo: Modo.edicao,
+                      ingrediente: _ingrediente,
+                    ))).then((ingrediente) {
+          if (ingrediente != null) {
+            Scaffold.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.green,
+              content: Text("Ingrediente atualizado com sucesso!"),
+            ));
+            _callback(ingrediente);
+          }
+        });
+      },
+      child: Icon(Icons.edit),
+    );
+  }
+}
+
 class _MostrarIngredienteState extends State<MostrarIngrediente> {
   @override
   Widget build(BuildContext context) {
@@ -20,20 +49,12 @@ class _MostrarIngredienteState extends State<MostrarIngrediente> {
       appBar: AppBar(
         title: Text(widget._ingrediente.nome),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => IngredienteForm(
-                        modo: Modo.edicao,
-                        ingrediente: widget._ingrediente,
-                      ))).then((ingrediente) => setState(() {
-                if (ingrediente != null) widget._ingrediente = ingrediente;
-              }));
-        },
-        child: Icon(Icons.edit),
-      ),
+      floatingActionButton:
+          BotaoEditarIngrediente(widget._ingrediente, (ingrediente) {
+        setState(() {
+          widget._ingrediente = ingrediente;
+        });
+      }),
       body: ListView(
         children: <Widget>[
           Card(
@@ -119,7 +140,7 @@ class _MostrarIngredienteState extends State<MostrarIngrediente> {
                         }
                         IngredienteDao()
                             .delete(widget._ingrediente.id)
-                            .then((value) => Navigator.pop(context));
+                            .then((value) => Navigator.pop(context, true));
                       });
                     }
                   });

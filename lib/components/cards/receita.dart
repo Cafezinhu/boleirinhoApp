@@ -9,6 +9,7 @@ class CartaoReceita extends StatelessWidget {
   CartaoReceita(this._receita, this._ingredientes);
   @override
   Widget build(BuildContext context) {
+    ScaffoldState scaffold = Scaffold.of(context);
     return Card(
       child: ListTile(
         title: Text(_receita.nome),
@@ -19,8 +20,15 @@ class CartaoReceita extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      MostrarReceita(_receita, _ingredientes)))
+                  builder: (ctx) =>
+                      MostrarReceita(_receita, _ingredientes))).then((value) {
+            if (value != null) {
+              scaffold.showSnackBar(SnackBar(
+                backgroundColor: Colors.green,
+                content: Text("Receita excluída com sucesso!"),
+              ));
+            }
+          })
         },
       ),
     );

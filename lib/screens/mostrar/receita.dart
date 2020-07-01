@@ -14,6 +14,36 @@ class MostrarReceita extends StatefulWidget {
   _MostrarReceitaState createState() => _MostrarReceitaState();
 }
 
+class BotaoEditarReceita extends StatelessWidget {
+  List<Ingrediente> _ingredientes;
+  Receita _receita;
+  Function _callback;
+  BotaoEditarReceita(this._ingredientes, this._receita, this._callback);
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (ctx) => ReceitaForm(
+                    ingredientes: _ingredientes,
+                    modo: Modo.edicao,
+                    receita: _receita))).then((receita) {
+          if (receita != null) {
+            Scaffold.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.green,
+              content: Text("Receita atualizada com sucesso!"),
+            ));
+            _callback(receita);
+          }
+        });
+      },
+      child: Icon(Icons.edit),
+    );
+  }
+}
+
 class _MostrarReceitaState extends State<MostrarReceita> {
   @override
   Widget build(BuildContext context) {
@@ -21,21 +51,12 @@ class _MostrarReceitaState extends State<MostrarReceita> {
         appBar: AppBar(
           title: Text(widget._receita.nome),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ReceitaForm(
-                            ingredientes: widget.ingredientes,
-                            modo: Modo.edicao,
-                            receita: widget._receita)))
-                .then((receita) => setState(() {
-                      if (receita != null) widget._receita = receita;
-                    }));
-          },
-          child: Icon(Icons.edit),
-        ),
+        floatingActionButton:
+            BotaoEditarReceita(widget.ingredientes, widget._receita, (receita) {
+          setState(() {
+            widget._receita = receita;
+          });
+        }),
         body: ListView.builder(
             itemCount: widget._receita.ingredientes.length + 2,
             itemBuilder: (context, index) {
@@ -103,7 +124,7 @@ class _MostrarReceitaState extends State<MostrarReceita> {
                         if (value) {
                           ReceitaDao()
                               .delete(widget._receita.id)
-                              .then((value) => Navigator.pop(context));
+                              .then((value) => Navigator.pop(context, true));
                         }
                       });
                     }),
