@@ -3,7 +3,7 @@ import 'package:BoleirinhoApp/database/dao/receita_dao.dart';
 import 'package:BoleirinhoApp/models/enums/modo.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
 import 'package:BoleirinhoApp/models/receita.dart';
-import 'package:BoleirinhoApp/screens/adicionar/receita.dart';
+import 'package:BoleirinhoApp/screens/form/receita.dart';
 import 'package:flutter/material.dart';
 
 class MostrarReceita extends StatefulWidget {
