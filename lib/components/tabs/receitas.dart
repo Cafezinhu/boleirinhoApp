@@ -24,30 +24,31 @@ class _ReceitasTabState extends State<ReceitasTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-          future: widget._receitaDao.findAll(),
+          future: widget._ingredienteDao.findAll(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              final List<Receita> receitas = snapshot.data;
-              if (receitas.length == 0) {
-                return FutureBuilder(
-                  future: widget._ingredienteDao.findAll(),
-                  builder: (context, snapshot) {
-                    widget._ingredientes = snapshot.data;
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (widget._ingredientes.length == 0) {
-                        return TextoAdicionarIngredienteTelaReceita();
-                      }
+              List<Ingrediente> ingredientes = snapshot.data;
+              widget._ingredientes = ingredientes;
+              if (ingredientes.length == 0) {
+                return TextoAdicionarIngredienteTelaReceita();
+              }
+              return FutureBuilder(
+                future: widget._receitaDao.findAll(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    List<Receita> receitas = snapshot.data;
+                    if (receitas.length == 0) {
                       return TextoAdicionarReceita();
                     }
-                    return CircularProgressIndicator();
-                  },
-                );
-              }
-              return ListView.builder(
-                  itemCount: receitas.length,
-                  itemBuilder: (context, index) {
-                    return CartaoReceita(receitas[index], widget._ingredientes);
-                  });
+                    return ListView.builder(
+                        itemCount: receitas.length,
+                        itemBuilder: (context, index) {
+                          return CartaoReceita(receitas[index], ingredientes);
+                        });
+                  }
+                  return Center(child: CircularProgressIndicator());
+                },
+              );
             }
             return Center(child: CircularProgressIndicator());
           }),
