@@ -52,7 +52,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          ReceitasTab(ingredienteDao, receitaDao, _ingredientes),
+          ReceitasTab(ingredienteDao, receitaDao),
           IngredientesTab(ingredienteDao, _ingredientes)
         ],
       ),

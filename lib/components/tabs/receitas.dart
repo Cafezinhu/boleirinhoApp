@@ -13,7 +13,7 @@ class ReceitasTab extends StatefulWidget {
   IngredienteDao _ingredienteDao;
   ReceitaDao _receitaDao;
   List<Ingrediente> _ingredientes;
-  ReceitasTab(this._ingredienteDao, this._receitaDao, this._ingredientes);
+  ReceitasTab(this._ingredienteDao, this._receitaDao);
 
   @override
   _ReceitasTabState createState() => _ReceitasTabState();
@@ -32,9 +32,9 @@ class _ReceitasTabState extends State<ReceitasTab> {
                 return FutureBuilder(
                   future: widget._ingredienteDao.findAll(),
                   builder: (context, snapshot) {
+                    widget._ingredientes = snapshot.data;
                     if (snapshot.connectionState == ConnectionState.done) {
-                      List<Ingrediente> ingredientes = snapshot.data;
-                      if (ingredientes.length == 0) {
+                      if (widget._ingredientes.length == 0) {
                         return TextoAdicionarIngredienteTelaReceita();
                       }
                       return TextoAdicionarReceita();
