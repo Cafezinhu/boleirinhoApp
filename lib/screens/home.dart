@@ -1,5 +1,8 @@
 import 'package:BoleirinhoApp/components/cards/ingrediente.dart';
 import 'package:BoleirinhoApp/components/cards/receita.dart';
+import 'package:BoleirinhoApp/components/richtext/add_ingrediente.dart';
+import 'package:BoleirinhoApp/components/richtext/add_ingrediente_tela_receita.dart';
+import 'package:BoleirinhoApp/components/richtext/add_receita.dart';
 import 'package:BoleirinhoApp/database/dao/ingrediente_dao.dart';
 import 'package:BoleirinhoApp/database/dao/receita_dao.dart';
 import 'package:BoleirinhoApp/models/enums/modo.dart';
@@ -24,11 +27,11 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    super.initState();
     _tabController = TabController(length: 2, vsync: this);
     ingredienteDao
         .findAll()
         .then((ingredientes) => _ingredientes = ingredientes);
+    super.initState();
   }
 
   @override
@@ -62,6 +65,22 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     final List<Receita> receitas = snapshot.data;
+                    if (receitas.length == 0) {
+                      return FutureBuilder(
+                        future: ingredienteDao.findAll(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            List<Ingrediente> ingredientes = snapshot.data;
+                            if (ingredientes.length == 0) {
+                              return TextoAdicionarIngredienteTelaReceita();
+                            }
+                            return TextoAdicionarReceita();
+                          }
+                          return CircularProgressIndicator();
+                        },
+                      );
+                    }
                     return ListView.builder(
                         itemCount: receitas.length,
                         itemBuilder: (context, index) {
@@ -80,6 +99,9 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   _ingredientes = snapshot.data;
+                  if (_ingredientes.length == 0) {
+                    return TextoAdicionarIngrediente();
+                  }
                   return ListView.builder(
                       itemCount: _ingredientes.length,
                       itemBuilder: (context, index) {
