@@ -1,5 +1,6 @@
 import 'package:BoleirinhoApp/components/cards/ingrediente.dart';
 import 'package:BoleirinhoApp/components/richtext/add_ingrediente.dart';
+import 'package:BoleirinhoApp/components/textFields/pesquisa.dart';
 import 'package:BoleirinhoApp/database/dao/ingrediente_dao.dart';
 import 'package:BoleirinhoApp/models/enums/modo.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
@@ -10,6 +11,8 @@ class IngredientesTab extends StatefulWidget {
   IngredienteDao _ingredienteDao;
   List<Ingrediente> _ingredientes;
   IngredientesTab(this._ingredienteDao, this._ingredientes);
+
+  TextEditingController _pesquisaController = TextEditingController();
   @override
   _IngredientesTabState createState() => _IngredientesTabState();
 }
@@ -22,17 +25,20 @@ class _IngredientesTabState extends State<IngredientesTab> {
         future: widget._ingredienteDao.findAll(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            widget._ingredientes = snapshot.data;
-            if (widget._ingredientes.length == 0) {
-              return TextoAdicionarIngrediente();
+            if (snapshot.data.length > 0) {
+              IngredientesList _ingredientesList =
+                  IngredientesList(snapshot.data, widget._pesquisaController);
+              return Column(
+                children: <Widget>[
+                  Pesquisa(widget._pesquisaController, () {
+                    _ingredientesList.state.setState(() {});
+                  }),
+                  Expanded(child: _ingredientesList)
+                ],
+              );
             }
-            return ListView.builder(
-                itemCount: widget._ingredientes.length,
-                itemBuilder: (context, index) {
-                  return CartaoIngrediente(widget._ingredientes[index]);
-                });
+            return TextoAdicionarIngrediente();
           }
-
           return Center(child: CircularProgressIndicator());
         },
       ),
@@ -68,5 +74,34 @@ class _IngredientesTabState extends State<IngredientesTab> {
                 }
               })
             });
+  }
+}
+
+class IngredientesList extends StatefulWidget {
+  State state = _IngredientesListState();
+
+  List<Ingrediente> _ingredientes;
+  TextEditingController _pesquisaController;
+
+  IngredientesList(this._ingredientes, this._pesquisaController);
+
+  @override
+  _IngredientesListState createState() => state;
+}
+
+class _IngredientesListState extends State<IngredientesList> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: widget._ingredientes.length,
+        itemBuilder: (context, index) {
+          if (widget._pesquisaController.text == null ||
+              widget._pesquisaController.text.trim() == "" ||
+              widget._ingredientes[index].nome.toLowerCase().contains(
+                  widget._pesquisaController.text.trim().toLowerCase())) {
+            return CartaoIngrediente(widget._ingredientes[index]);
+          }
+          return Container();
+        });
   }
 }
