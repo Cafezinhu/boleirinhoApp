@@ -172,7 +172,7 @@ class _IngredienteFormState extends State<IngredienteForm> {
         if (preco >= 0 && quantidade > 0) {
           setState(() {
             widget._precoController.text =
-                MathUtils.doubleToString(preco / quantidade, 2);
+                MathUtils.doubleToString(preco / quantidade, 3);
           });
         }
       }

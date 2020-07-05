@@ -12,7 +12,7 @@ class IngredienteNaReceita {
   double calcularPreco() {
     if (ingrediente.precoPorUnidade == null || quantidade == null) return 0;
     return MathUtils.doubleRoundPrecision(
-        ingrediente.precoPorUnidade * quantidade, 2);
+        ingrediente.precoPorUnidade * quantidade, 3);
   }
 
   String quantidadeExtensao() {
