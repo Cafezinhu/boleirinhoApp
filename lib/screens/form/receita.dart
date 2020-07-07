@@ -72,7 +72,7 @@ class _ReceitaFormState extends State<ReceitaForm> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         decoration: InputDecoration(
-                          labelText: "Instruções",
+                          labelText: "Modo de preparo",
                         ),
                         style: TextStyle(fontSize: 24.0),
                         minLines: 3,

@@ -1,3 +1,4 @@
+import 'package:BoleirinhoApp/components/dialogs/calculadora-help.dart';
 import 'package:BoleirinhoApp/database/dao/ingrediente_dao.dart';
 import 'package:BoleirinhoApp/models/editor.dart';
 import 'package:BoleirinhoApp/models/enums/modo.dart';
@@ -39,9 +40,10 @@ class _IngredienteFormState extends State<IngredienteForm> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text(widget.modo == Modo.adicao
-                ? "Adicionar Ingrediente"
-                : "Editar Ingrediente")),
+          title: Text(widget.modo == Modo.adicao
+              ? "Adicionar Ingrediente"
+              : "Editar Ingrediente"),
+        ),
         body: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           children: <Widget>[
@@ -96,10 +98,19 @@ class _IngredienteFormState extends State<IngredienteForm> {
               child: Column(
                 children: <Widget>[
                   ListTile(
-                    title: Text("Calculadora de preço",
-                        style: TextStyle(fontSize: 24.0)),
+                    title: Text(
+                      "Calculadora de preço",
+                      style: TextStyle(fontSize: 24.0),
+                    ),
                     trailing: Icon(Icons.help_outline),
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return CalculadoraHelp(context);
+                        },
+                      );
+                    },
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
