@@ -64,14 +64,18 @@ class _MostrarReceitaState extends State<MostrarReceita> {
                 return Column(children: <Widget>[
                   Card(
                     child: ListTile(
-                      title: Text("Preço total: R\$" +
-                          widget._receita.calcularPreco().toString()),
+                      title: Text("Preço unitário: R\$" +
+                          widget._receita
+                              .calcularPrecoDeRendimento()
+                              .toString() +
+                          "\nPreço total: R\$" +
+                          widget._receita.calcularCustoTotal().toString()),
                       leading: Icon(Icons.monetization_on),
                     ),
                   ),
                   Card(
                     child: ListTile(
-                      title: Text("Instruções:"),
+                      title: Text("Modo de preparo:"),
                       subtitle: Text(widget._receita.instrucoes),
                       leading: Icon(Icons.cake),
                     ),

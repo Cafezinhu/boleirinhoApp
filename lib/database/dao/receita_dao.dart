@@ -8,12 +8,14 @@ class ReceitaDao {
   static const String tableSql = 'CREATE TABLE $_tableName('
       '$_id INTEGER PRIMARY KEY, '
       '$_nome TEXT, '
+      '$_rendimentos TEXT, '
       '$_instrucoes TEXT, '
       '$_ingredientes TEXT)';
 
   static const String _tableName = 'receitas';
   static const String _id = 'id';
   static const String _nome = 'nome';
+  static const String _rendimentos = 'rendimentos';
   static const String _instrucoes = 'instrucoes';
   static const String _ingredientes = 'ingredientes';
 
@@ -33,6 +35,7 @@ class ReceitaDao {
     Map<String, dynamic> map = Map();
     map[_nome] = receita.nome;
     map[_instrucoes] = receita.instrucoes;
+    map[_rendimentos] = receita.rendimentos;
 
     return map;
   }
@@ -69,8 +72,8 @@ class ReceitaDao {
     for (Map<String, dynamic> map in mapList) {
       final List<IngredienteNaReceita> ingredientes =
           await IngredienteNaReceitaDao().find(map[_id]);
-      final Receita receita =
-          Receita(map[_id], map[_nome], map[_instrucoes], ingredientes);
+      final Receita receita = Receita(map[_id], map[_nome], map[_instrucoes],
+          ingredientes, double.parse(map[_rendimentos]));
 
       receitas.add(receita);
     }

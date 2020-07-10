@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 class ReceitaForm extends StatefulWidget {
   TextEditingController _nomeController = TextEditingController();
+  TextEditingController _rendimentosController = TextEditingController();
   TextEditingController _instrucoesController = TextEditingController();
   List<IngredienteNaReceita> _ingredientesNaReceita = List();
   List<Ingrediente> ingredientes;
@@ -24,9 +25,10 @@ class ReceitaForm extends StatefulWidget {
     if (modo == Modo.edicao) {
       receitaRecebida = Receita.clone(receita);
       _nomeController.text = receitaRecebida.nome;
+      _rendimentosController.text = receitaRecebida.rendimentos.toString();
       _instrucoesController.text = receitaRecebida.instrucoes;
       _ingredientesNaReceita = receitaRecebida.ingredientes;
-      _custoTotal = receitaRecebida.calcularPreco();
+      _custoTotal = receitaRecebida.calcularCustoTotal();
       for (IngredienteNaReceita i in _ingredientesNaReceita) {
         TextEditingController controller = TextEditingController();
         controller.text = i.quantidade.toString();
@@ -67,6 +69,14 @@ class _ReceitaFormState extends State<ReceitaForm> {
                       child: Editor(
                         label: "Nome",
                         controller: widget._nomeController,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Editor(
+                        label: "Rende quantos?",
+                        controller: widget._rendimentosController,
+                        keyboardType: TextInputType.number,
                       ),
                     ),
                     Padding(
@@ -263,15 +273,18 @@ class _ReceitaFormState extends State<ReceitaForm> {
                                   : "";
                           List<IngredienteNaReceita> ingredientes =
                               widget._ingredientesNaReceita;
+                          double rendimentos = double.tryParse(
+                              widget._rendimentosController.text);
+                          if (rendimentos == null) rendimentos = 1;
                           if (nome != null) {
                             if (widget.modo == Modo.adicao) {
-                              Receita novaReceita =
-                                  Receita(0, nome, instrucoes, ingredientes);
+                              Receita novaReceita = Receita(0, nome, instrucoes,
+                                  ingredientes, rendimentos);
                               dao.save(novaReceita).then((value) =>
                                   Navigator.pop(context, novaReceita));
                             } else {
                               Receita novaReceita = Receita(widget.receita.id,
-                                  nome, instrucoes, ingredientes);
+                                  nome, instrucoes, ingredientes, rendimentos);
                               dao.update(novaReceita).then((value) =>
                                   Navigator.pop(context, novaReceita));
                             }

@@ -13,7 +13,11 @@ class CartaoReceita extends StatelessWidget {
     return Card(
       child: ListTile(
         title: Text(_receita.nome),
-        subtitle: Text("R\$" + _receita.calcularPreco().toString()),
+        subtitle: Text("Rende ${_receita.rendimentos.toString()}\n" +
+            (_receita.rendimentos > 1
+                ? "Preço unitário: R\$${_receita.calcularPrecoDeRendimento().toString()} cada\n"
+                : "") +
+            "Custo total: R\$${_receita.calcularCustoTotal().toString()}"),
         leading: Icon(Icons.cake),
         onTap: () => {
           //chama a tela de receita
