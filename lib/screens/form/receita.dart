@@ -4,6 +4,7 @@ import 'package:BoleirinhoApp/models/enums/modo.dart';
 import 'package:BoleirinhoApp/models/ingrediente.dart';
 import 'package:BoleirinhoApp/models/ingrediente_na_receita.dart';
 import 'package:BoleirinhoApp/models/receita.dart';
+import 'package:BoleirinhoApp/utils/math.dart';
 import 'package:flutter/material.dart';
 
 class ReceitaForm extends StatefulWidget {
@@ -288,7 +289,7 @@ class _ReceitaFormState extends State<ReceitaForm> {
     for (IngredienteNaReceita ingrediente in widget._ingredientesNaReceita) {
       custo += ingrediente.calcularPreco();
     }
-    widget._custoTotal = custo;
+    widget._custoTotal = MathUtils.doubleRoundPrecision(custo, 2);
   }
 
   Future<Ingrediente> abrirSelecaoIngrediente(String titulo) {

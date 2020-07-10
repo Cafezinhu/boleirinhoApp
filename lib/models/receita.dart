@@ -1,3 +1,5 @@
+import 'package:BoleirinhoApp/utils/math.dart';
+
 import 'ingrediente_na_receita.dart';
 
 class Receita {
@@ -12,7 +14,7 @@ class Receita {
     for (IngredienteNaReceita ingrediente in ingredientes) {
       preco += ingrediente.calcularPreco();
     }
-    return preco;
+    return MathUtils.doubleRoundPrecision(preco, 2);
   }
 
   static Receita clone(Receita receita) {

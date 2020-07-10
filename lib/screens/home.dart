@@ -37,7 +37,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Boleirinho"),
+        title: Text(" Boleirinho"),
         bottom: TabBar(controller: _tabController, tabs: <Widget>[
           Tab(
             icon: Icon(Icons.cake),
