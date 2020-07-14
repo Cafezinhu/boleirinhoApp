@@ -151,7 +151,7 @@ class _IngredienteFormState extends State<IngredienteForm> {
                   onPressed: () {
                     final String nome = widget._nomeController.text;
                     final double preco =
-                        double.tryParse(widget._precoController.text);
+                        MathUtils.stringToDouble(widget._precoController.text);
                     final String unidade = widget._unidade.stringfy();
                     if (nome != null && preco != null && unidade != null) {
                       if (widget.modo == Modo.adicao) {
@@ -175,9 +175,9 @@ class _IngredienteFormState extends State<IngredienteForm> {
   Function _calcularPrecoPorQuantidade() {
     return (String _) {
       final double preco =
-          double.tryParse(widget._calculadoraPrecoController.text);
-      final double quantidade =
-          double.tryParse(widget._calculadoraQuantidadeController.text);
+          MathUtils.stringToDouble(widget._calculadoraPrecoController.text);
+      final double quantidade = MathUtils.stringToDouble(
+          widget._calculadoraQuantidadeController.text);
 
       if (preco != null && quantidade != null) {
         if (preco >= 0 && quantidade > 0) {

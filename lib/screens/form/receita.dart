@@ -157,7 +157,8 @@ class _ReceitaFormState extends State<ReceitaForm> {
                               setState(() {
                                 if (valor != null) {
                                   widget._ingredientesNaReceita[index - 1]
-                                      .quantidade = double.tryParse(valor);
+                                          .quantidade =
+                                      MathUtils.stringToDouble(valor);
                                   _calcularCustoTotal();
                                 } else {
                                   widget._ingredientesNaReceita[index - 1]
@@ -273,7 +274,7 @@ class _ReceitaFormState extends State<ReceitaForm> {
                                   : "";
                           List<IngredienteNaReceita> ingredientes =
                               widget._ingredientesNaReceita;
-                          double rendimentos = double.tryParse(
+                          double rendimentos = MathUtils.stringToDouble(
                               widget._rendimentosController.text);
                           if (rendimentos == null) rendimentos = 1;
                           if (nome != null) {

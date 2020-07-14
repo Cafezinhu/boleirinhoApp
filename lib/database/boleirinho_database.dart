@@ -4,7 +4,7 @@ import 'package:BoleirinhoApp/database/dao/receita_dao.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-Future<Database> getDatabase() async{
+Future<Database> getDatabase() async {
   final String path = join(await getDatabasesPath(), 'boleirinho.db');
 
   return openDatabase(
@@ -15,6 +15,5 @@ Future<Database> getDatabase() async{
       db.execute(IngredienteNaReceitaDao.tableSql);
     },
     version: 1,
-    onDowngrade: onDatabaseDowngradeDelete
   );
 }
